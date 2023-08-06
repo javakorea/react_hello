@@ -1,10 +1,27 @@
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div>Hello teammoca!2</div>
-  );
-}
+//
+const express = require("express");
+const path = require("path");
 
-export default App;
+const app = express();
+
+app.set("port", process.env.PORT || 5000);
+
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "/index.html"));
+});
+
+app.listen(app.get("port"), () => {
+  console.log(app.get("port"), "번 포트에서 대기중..");
+});
+//
+// function App() {
+//   return (
+//     <div>Hello teammoca!</div>
+//   );
+// }
+
+export default app;
