@@ -6,11 +6,11 @@
 |---|---|
 | 2026-10-26 | Vite React 템플릿으로 프로젝트 생성 (React 19 · Vite 8) · Vite 의 역할 이해 |
 | 2026-10-26 | 1단계 JSX 끝 · 2단계 컴포넌트·props 설명 들음 · `&&`·`\|\|`·`??` 가 값을 돌려주는 방식 |
-| 2026-10-27 | 2단계 끝(숙제 `Badge.jsx` 는 원격이라 정답 예시로 대신) · 3단계 `useState` 시작 |
+| 2026-10-27 | 2단계 끝(숙제 `Badge.jsx` 는 원격이라 정답 예시로 대신) · 3단계 `useState` 끝 · 4단계 이벤트 시작 |
 
-**지금 위치: 3단계(`useState`) 하는 중 — 예제 `src/lesson3/Lesson3State.jsx` 설명 들음. 다음은 4단계(이벤트).**
+**지금 위치: 4단계(이벤트) 하는 중 — 예제 `src/lesson4/Lesson4Event.jsx` 설명 들음. 다음은 5단계(조건부·목록 렌더링).**
 
-- 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson3/Lesson3State.jsx` (원래 `./App.jsx`)
+- 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson4/Lesson4Event.jsx` (원래 `./App.jsx`)
 - 남은 숙제(PC 에서): `src/lesson2/Badge.jsx` 정답 예시를 보고 `Lesson2Props.jsx` 에서 import 해 써 보기
 
 ---
@@ -27,8 +27,8 @@
 | 0 | ☑ | 환경 | Vite·npm·프로젝트 구조(`main.jsx` → `App.jsx`) | Maven·W-Pack (아래 1·2절) |
 | 1 | ☑ | JSX | `{}` 안의 JS 식 · `className` · 태그 닫기 · `<>` 조각 · 주석 | MOCA HTML 화면 |
 | 2 | ☑ | 컴포넌트와 props | 함수 하나 = 컴포넌트 · props 로 값 넘기기 · `children` · 파일 나누기 | MOCA 컴포넌트 `data-m-*` 속성 |
-| 3 | ◐ | state — `useState` | 값이 바뀌면 다시 그리기 · 불변성(배열·객체는 새로 만들기) | MOCA `setValue` → 화면 갱신 |
-| 4 | ☐ | 이벤트 | `onClick`·`onChange` · 이벤트 객체 · 함수 넘기기 vs 부르기 | MOCA `data-m-onclick` |
+| 3 | ☑ | state — `useState` | 값이 바뀌면 다시 그리기 · 불변성(배열·객체는 새로 만들기) | MOCA `setValue` → 화면 갱신 |
+| 4 | ◐ | 이벤트 | `onClick`·`onChange` · 이벤트 객체 · 함수 넘기기 vs 부르기 | MOCA `data-m-onclick` |
 | 5 | ☐ | 조건부·목록 렌더링 | `&&`·삼항 · `map()` · `key` 가 필요한 까닭 | 그리드 행 그리기 |
 | 6 | ☐ | 폼 | 제어 컴포넌트(input 값 = state) · 여러 칸 한 객체로 · 검증 | MOCA form 컴포넌트 |
 
@@ -218,4 +218,15 @@ jsx("button", {
 - 다시 그리기 = 컴포넌트 함수를 **처음부터 다시 부르는 것**. `useState` 만 이전 값을 기억해 돌려준다.
 - **불변성**: 배열·객체는 고치지 말고 새로 만든다 — `[...items, '귤']`, `{ ...user, age: 31 }`.
   `push` 후 같은 배열을 넘기면 React 가 「주소가 같다 = 안 바뀌었다」고 보고 안 그린다(Java 의 `==` 비교).
+- 지우기는 `filter`, 고치기는 `map` 으로 새 배열을 만든다.
 - MOCA 에 견주면: `setValue` 를 부르면 화면이 바뀌는 것과 같지만, React 는 **화면 전체를 함수로 다시 계산**하고 바뀐 곳만 DOM 에 반영한다.
+
+## 6. 이벤트 (4단계) — `src/lesson4/Lesson4Event.jsx`
+
+- `on` + 카멜 표기(`onClick`·`onChange`·`onSubmit`·`onKeyDown`)에 **함수를 넘긴다**.
+- **넘기기 vs 부르기**: `onClick={handle}` ✅ / `onClick={handle()}` ❌ — 그릴 때 바로 실행된다. 안에서 setState 하면 무한 반복.
+- 인자가 필요하면 화살표로 감싼다: `onClick={() => remove(id)}`.
+- 이벤트 객체 `e`: `e.target.value`(입력값) · `e.preventDefault()`(폼 제출 시 새로고침 막기).
+- 한 핸들러 안에서 `setCount(count + 1)` 을 세 번 해도 +1 — `count` 는 이번 그리기 때의 값으로 고정돼 있다.
+  이전 값 기준으로 쌓으려면 함수로 넘긴다: `setCount(c => c + 1)`.
+- MOCA 에 견주면 `data-m-onclick="fn"` 과 같지만, 문자열이 아니라 **함수 자체**를 넘긴다(Java 의 람다·메서드 참조 `this::handle`).
