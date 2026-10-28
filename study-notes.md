@@ -7,10 +7,11 @@
 | 2026-10-26 | Vite React 템플릿으로 프로젝트 생성 (React 19 · Vite 8) · Vite 의 역할 이해 |
 | 2026-10-26 | 1단계 JSX 끝 · 2단계 컴포넌트·props 설명 들음 · `&&`·`\|\|`·`??` 가 값을 돌려주는 방식 |
 | 2026-10-27 | 2단계 끝(숙제 `Badge.jsx` 는 원격이라 정답 예시로 대신) · 3단계 `useState` 끝 · 4단계 이벤트 시작 |
+| 2026-10-28 | 4단계 끝 · 5단계 조건부·목록 렌더링 시작 |
 
-**지금 위치: 4단계(이벤트) 하는 중 — 예제 `src/lesson4/Lesson4Event.jsx` 설명 들음. 다음은 5단계(조건부·목록 렌더링).**
+**지금 위치: 5단계(조건부·목록 렌더링) 하는 중 — 예제 `src/lesson5/Lesson5List.jsx`. 다음은 6단계(폼).**
 
-- 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson4/Lesson4Event.jsx` (원래 `./App.jsx`)
+- 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson5/Lesson5List.jsx` (원래 `./App.jsx`)
 - 남은 숙제(PC 에서): `src/lesson2/Badge.jsx` 정답 예시를 보고 `Lesson2Props.jsx` 에서 import 해 써 보기
 
 ---
@@ -28,8 +29,8 @@
 | 1 | ☑ | JSX | `{}` 안의 JS 식 · `className` · 태그 닫기 · `<>` 조각 · 주석 | MOCA HTML 화면 |
 | 2 | ☑ | 컴포넌트와 props | 함수 하나 = 컴포넌트 · props 로 값 넘기기 · `children` · 파일 나누기 | MOCA 컴포넌트 `data-m-*` 속성 |
 | 3 | ☑ | state — `useState` | 값이 바뀌면 다시 그리기 · 불변성(배열·객체는 새로 만들기) | MOCA `setValue` → 화면 갱신 |
-| 4 | ◐ | 이벤트 | `onClick`·`onChange` · 이벤트 객체 · 함수 넘기기 vs 부르기 | MOCA `data-m-onclick` |
-| 5 | ☐ | 조건부·목록 렌더링 | `&&`·삼항 · `map()` · `key` 가 필요한 까닭 | 그리드 행 그리기 |
+| 4 | ☑ | 이벤트 | `onClick`·`onChange` · 이벤트 객체 · 함수 넘기기 vs 부르기 | MOCA `data-m-onclick` |
+| 5 | ◐ | 조건부·목록 렌더링 | `&&`·삼항 · `map()` · `key` 가 필요한 까닭 | 그리드 행 그리기 |
 | 6 | ☐ | 폼 | 제어 컴포넌트(input 값 = state) · 여러 칸 한 객체로 · 검증 | MOCA form 컴포넌트 |
 
 ### 중급 — 화면을 나누고 데이터를 다루기
