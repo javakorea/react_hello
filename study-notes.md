@@ -9,7 +9,7 @@
 | 2026-10-27 | 2단계 끝(숙제 `Badge.jsx` 는 원격이라 정답 예시로 대신) · 3단계 `useState` 끝 · 4단계 이벤트 시작 |
 | 2026-10-28 | 4단계 끝 · 5단계 조건부·목록 렌더링 시작 |
 
-**지금 위치: 5단계(조건부·목록 렌더링) 하는 중 — 예제 `src/lesson5/Lesson5List.jsx`. 다음은 6단계(폼).**
+**지금 위치: 5단계(조건부·목록 렌더링) 하는 중 — 예제 `src/lesson5/Lesson5List.jsx` 설명 들음(2026-10-28). 남은 것: ④ key 실험 직접 해 보기 → 5단계 노트 정리 → 6단계(폼).**
 
 - 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson5/Lesson5List.jsx` (원래 `./App.jsx`)
 - 남은 숙제(PC 에서): `src/lesson2/Badge.jsx` 정답 예시를 보고 `Lesson2Props.jsx` 에서 import 해 써 보기
