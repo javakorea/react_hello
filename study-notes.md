@@ -9,10 +9,11 @@
 | 2026-10-27 | 2단계 끝(숙제 `Badge.jsx` 는 원격이라 정답 예시로 대신) · 3단계 `useState` 끝 · 4단계 이벤트 시작 |
 | 2026-10-28 | 4단계 끝 · 5단계 조건부·목록 렌더링 시작 |
 | 2026-10-29 | 5단계 끝 — key 실험(id vs 인덱스) · key = 정체를 맞추는 이름표라는 것 정리 |
+| 2026-10-30 | 6단계 폼 끝 — 구조 분해 할당 · 제어 컴포넌트의 흐름(입력→state→value) 이해 · 7단계 state 끌어올리기 시작 |
 
-**지금 위치: 5단계 끝(2026-10-29). 다음: 6단계(폼) — 제어 컴포넌트 예제 만들기.**
+**지금 위치: 6단계 끝(2026-10-30). 7단계(state 끌어올리기) 예제 `src/lesson7/Lesson7Lifting.jsx` 만들어 둠 — 다음: 브라우저에서 ①②③ 보며 설명 듣기.**
 
-- 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson5/Lesson5List.jsx` (원래 `./App.jsx`)
+- 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson7/Lesson7Lifting.jsx` (원래 `./App.jsx`)
 - 남은 숙제(PC 에서): `src/lesson2/Badge.jsx` 정답 예시를 보고 `Lesson2Props.jsx` 에서 import 해 써 보기
 
 ---
@@ -32,13 +33,13 @@
 | 3 | ☑ | state — `useState` | 값이 바뀌면 다시 그리기 · 불변성(배열·객체는 새로 만들기) | MOCA `setValue` → 화면 갱신 |
 | 4 | ☑ | 이벤트 | `onClick`·`onChange` · 이벤트 객체 · 함수 넘기기 vs 부르기 | MOCA `data-m-onclick` |
 | 5 | ☑ | 조건부·목록 렌더링 | `&&`·삼항 · `map()` · `key` 가 필요한 까닭 | 그리드 행 그리기 |
-| 6 | ☐ | 폼 | 제어 컴포넌트(input 값 = state) · 여러 칸 한 객체로 · 검증 | MOCA form 컴포넌트 |
+| 6 | ☑ | 폼 | 제어 컴포넌트(input 값 = state) · 여러 칸 한 객체로 · 검증 | MOCA form 컴포넌트 |
 
 ### 중급 — 화면을 나누고 데이터를 다루기
 
 | # | 상태 | 주제 | 배울 것 | 견줄 것 |
 |---|---|---|---|---|
-| 7 | ☐ | state 끌어올리기 | 형제 컴포넌트가 값 나누기 · 부모가 state, 자식은 props+콜백 | 그리드 선택 → 상세 폼 |
+| 7 | ◐ | state 끌어올리기 | 형제 컴포넌트가 값 나누기 · 부모가 state, 자식은 props+콜백 | 그리드 선택 → 상세 폼 |
 | 8 | ☐ | `useEffect` | 그린 뒤 할 일 · 의존성 배열 · 정리 함수 · 두 번 도는 까닭(StrictMode) | `$p.onpageload` |
 | 9 | ☐ | 서버 호출 | `fetch` · 로딩·오류 상태 · moca2026ai 8080 API 불러 보기 | MOCA `tran` / `select.do` |
 | 10 | ☐ | `useRef` | DOM 직접 잡기(포커스) · 다시 그리지 않는 값 보관 | `$p.get('id')` |
@@ -292,3 +293,16 @@ const checked = e.target.checked
 - 콜론 방향도 반대: 리터럴은 「키 ← 값」, 구조 분해는 「키 → 변수」. 구조 분해는 리터럴을 거울처럼 뒤집은 모양.
 - 키와 변수 이름이 같으면 양쪽 다 `{ name }` 으로 축약돼 더 비슷해 보인다.
 - `Lesson6Form.jsx` 에선 18줄 `const { name, … } = e.target` 이 구조 분해, 19줄 `setForm({ ...form, [name]: … })` 의 `{ }` 는 값 자리라 객체 리터럴 — 한 함수 안에 둘이 나란히 있다.
+
+## 9. 폼 — 제어 컴포넌트 (6단계) — `src/lesson6/Lesson6Form.jsx`
+
+- **제어 컴포넌트** = input 의 값을 DOM 이 아니라 **state 가 들고 있는 것.** `value={form.name}` + `onChange={handleChange}` 가 한 쌍.
+- 흐름 한 바퀴: 글자 침 → 브라우저가 DOM 에 넣음 → `onChange` → `setForm` → 다시 그림 → `value` 가 DOM 을 덮어씀. 같은 값이라 티가 안 난다.
+- `onChange` 를 빼면 글자가 안 쳐지는 것처럼 보인다 — **막는 게 아니라** 들어온 글자를 이벤트 직후 `value`(`''`)로 되돌리기 때문. React 가 「read-only field」 경고를 낸다.
+  그래서 `onChange` 안에서 값을 손보면(숫자만 남기기 등) 저장 단계 하나로 입력 제한이 된다.
+- React 는 **DOM 을 스캔하지 않는다.** state 가 바뀌면 함수를 다시 불러 새 JSX 를 만들고, **이전 JSX 와 새 JSX** 를 비교해 달라진 DOM 만 고친다. 키 하나마다 「계산은 전체, DOM 반영은 바뀐 곳만」.
+- 다시 그려지는 범위는 **state 를 가진 컴포넌트와 그 아래**. 위(`main.jsx`)는 안 돈다.
+- 칸 여러 개는 객체 하나 `form` 에 모으고, `<input name="email">` 의 `name` 을 열쇠로 `setForm({ ...form, [name]: value })`. **`name` 속성 = state 객체의 키**라는 약속. 체크박스는 `value` 대신 `checked`.
+- 검증(`errors`)은 state 가 아니라 **그릴 때 계산** — 5단계 `shown` 과 같은 원칙. `disabled={!isValid}` 로 버튼을 막는다.
+- 제출은 `e.preventDefault()` 로 새로고침을 막고 **DOM 이 아니라 `form` state 를 쓴다.** `setForm(빈값)` 하면 모든 칸이 비워진다 — 진실은 state 에 있으니까.
+- 견주기: MOCA 는 `data-m-id` 와 데이터 필드를 맞춰 엔진이 DOM 값을 읽어 오지만, React 는 DOM 을 읽지 않고 state 만 본다. input 은 state 를 **보여 주는 창**.
