@@ -9,9 +9,9 @@
 | 2026-10-27 | 2단계 끝(숙제 `Badge.jsx` 는 원격이라 정답 예시로 대신) · 3단계 `useState` 끝 · 4단계 이벤트 시작 |
 | 2026-10-28 | 4단계 끝 · 5단계 조건부·목록 렌더링 시작 |
 | 2026-10-29 | 5단계 끝 — key 실험(id vs 인덱스) · key = 정체를 맞추는 이름표라는 것 정리 |
-| 2026-10-30 | 6단계 폼 끝 — 구조 분해 할당 · 제어 컴포넌트의 흐름(입력→state→value) 이해 · 7단계 state 끌어올리기 시작 |
+| 2026-10-30 | 6단계 폼 끝 — 구조 분해 할당 · 제어 컴포넌트의 흐름(입력→state→value) 이해 · 7단계 state 끌어올리기 끝(컴포넌트 props 의 `onChange` 는 내가 지은 이름 · 형제는 못 찾는다) |
 
-**지금 위치: 6단계 끝(2026-10-30). 7단계(state 끌어올리기) 예제 `src/lesson7/Lesson7Lifting.jsx` 만들어 둠 — 다음: 브라우저에서 ①②③ 보며 설명 듣기.**
+**지금 위치: 7단계 끝(2026-10-30). 다음: 8단계 `useEffect` — 예제 만들고 설명 듣기.**
 
 - 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson7/Lesson7Lifting.jsx` (원래 `./App.jsx`)
 - 남은 숙제(PC 에서): `src/lesson2/Badge.jsx` 정답 예시를 보고 `Lesson2Props.jsx` 에서 import 해 써 보기
@@ -39,7 +39,7 @@
 
 | # | 상태 | 주제 | 배울 것 | 견줄 것 |
 |---|---|---|---|---|
-| 7 | ◐ | state 끌어올리기 | 형제 컴포넌트가 값 나누기 · 부모가 state, 자식은 props+콜백 | 그리드 선택 → 상세 폼 |
+| 7 | ☑ | state 끌어올리기 | 형제 컴포넌트가 값 나누기 · 부모가 state, 자식은 props+콜백 | 그리드 선택 → 상세 폼 |
 | 8 | ☐ | `useEffect` | 그린 뒤 할 일 · 의존성 배열 · 정리 함수 · 두 번 도는 까닭(StrictMode) | `$p.onpageload` |
 | 9 | ☐ | 서버 호출 | `fetch` · 로딩·오류 상태 · moca2026ai 8080 API 불러 보기 | MOCA `tran` / `select.do` |
 | 10 | ☐ | `useRef` | DOM 직접 잡기(포커스) · 다시 그리지 않는 값 보관 | `$p.get('id')` |
@@ -306,3 +306,27 @@ const checked = e.target.checked
 - 검증(`errors`)은 state 가 아니라 **그릴 때 계산** — 5단계 `shown` 과 같은 원칙. `disabled={!isValid}` 로 버튼을 막는다.
 - 제출은 `e.preventDefault()` 로 새로고침을 막고 **DOM 이 아니라 `form` state 를 쓴다.** `setForm(빈값)` 하면 모든 칸이 비워진다 — 진실은 state 에 있으니까.
 - 견주기: MOCA 는 `data-m-id` 와 데이터 필드를 맞춰 엔진이 DOM 값을 읽어 오지만, React 는 DOM 을 읽지 않고 state 만 본다. input 은 state 를 **보여 주는 창**.
+
+## 10. state 끌어올리기 (7단계) — `src/lesson7/Lesson7Lifting.jsx`
+
+- **형제 컴포넌트는 서로를 모른다** — React 엔 MOCA 의 `$p.get('id')` 같은 「id 로 아무 컴포넌트나 찾는 목록」이 없다. 컴포넌트는 자기 props 만 받는 함수.
+  DOM 을 `querySelector` 로 뒤져 형제 input 을 고칠 수는 있지만 state 가 안 바뀌니 다음 그리기에 되돌려진다(6단계 원리).
+- 그래서 둘이 같은 값을 쓰면 **가장 가까운 공통 부모로 올린다.** 부모가 state, 자식은 `value`(props) + `onChange`(콜백). 데이터는 아래로, 바꾸라는 요청은 위로 — 단방향 흐름.
+- 이점: 값이 바뀌는 코드가 **state 를 가진 부모 한 곳**에만 있어 추적이 쉽다. MOCA 는 어디서든 `setValue` 할 수 있어 편하지만 큰 화면에선 누가 바꿨는지 찾기 어렵다.
+- `selected = users.find(...)` 는 state 아님 — 그릴 때 계산(5·6단계와 같은 원칙). 따로 state 로 두면 `users` 와 어긋난다.
+- 부모가 바꿀 때는 `users.map(u => u.id === changed.id ? changed : u)` — 한 명만 교체한 새 배열(불변성).
+
+### 컴포넌트에 쓴 `onChange`·`onSelect` 는 **내가 지은 props 이름** — HTML 이벤트가 아니다 ★
+
+| 태그 | `onChange={f}` 의 뜻 |
+|---|---|
+| `<input onChange={f}>` (소문자, DOM) | React 가 실제 입력 이벤트에 `f` 연결 |
+| `<CounterShared onChange={f}>` (대문자, 내 컴포넌트) | `props.onChange = f` 로 넘어갈 뿐. 안의 `<button onClick={() => onChange(value + 1)}>` 이 직접 부른다 |
+
+- 구별법은 **태그 첫 글자** 하나. `onBump` 라고 지어도 똑같이 돈다. `on` + 동작 은 `<input>` 처럼 쓰이게 하려는 관례.
+- `onChange={setShared}` — setter 도 「값 하나 받는 함수」라 그대로 넘긴다(`v => setShared(v)` 와 같음). 가공이 필요하면 `updateUser` 처럼 따로 만든다.
+
+### 그 밖에 걸렸던 것
+
+- `{' '}` = 공백 한 칸. JSX 는 태그 사이 **줄바꿈·들여쓰기 공백을 버리므로** 띄우려면 문자열로 명시. 같은 줄에 쓰면 필요 없음. 실무선 CSS `gap`.
+- 컴포넌트 함수는 **밖**(안에 두면 부모가 그려질 때마다 새 컴포넌트로 보여 state·DOM 이 날아감), 핸들러는 **안**(지역 변수 `users`·`setUsers` 를 써야 하니까). Java 로 치면 별도 클래스 vs private 메서드.
