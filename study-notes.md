@@ -258,3 +258,37 @@ jsx("button", {
 - `key={i}`(인덱스) → 메모가 새사람 줄에 남는다. 0번 이름표를 단 `<tr>` 은 「아까 그 줄」이라 믿고 **모든 줄의 글자를 한 칸씩 바꿔 쓰고** DOM 상태는 제자리에 남기 때문. 가운데 줄 삭제 시 메모가 한 칸씩 밀리는 것도 같은 이유.
 - 결론: key 는 **데이터의 고유 ID**. 인덱스는 순서가 절대 안 바뀌는 고정 목록에서만.
 - 견주기: 그리드가 **행 번호**로 셀을 찾을 때 행을 끼워 넣으면 어긋나는 문제와 같다. Java 로 치면 `equals`·`hashCode` 의 ID 필드.
+
+## 8. JS 문법 — 구조 분해 할당 (6단계 들어가며, 2026-10-30) ★ 어려웠던 것
+
+`src/lesson6/Lesson6Form.jsx` 18줄 `const { name, value, type, checked } = e.target` 에서 나온 문법.
+이름은 **구조 분해 할당**(destructuring assignment). ES2015 표준 JS 문법이고 React 전용이 아니다. Java 에는 없다.
+
+```js
+const { name, value, type, checked } = e.target
+// 이 한 줄 = 변수 선언 네 개
+const name    = e.target.name
+const value   = e.target.value
+const type    = e.target.type
+const checked = e.target.checked
+```
+
+- `{ }` 안의 이름은 내가 짓는 게 아니라 **원본 객체에 실제로 있는 속성 이름**. 없는 이름은 `undefined`.
+- 이 줄이 변수 `name` 을 만들기 때문에 19줄 `[name]: …` 을 쓸 수 있다. 이 줄을 지우면 `[e.target.name]` 으로 같이 바꿔야 한다.
+- 다른 이름으로 받기: `const { name: fieldName } = e.target` → `fieldName = e.target.name`. 콜론 왼쪽 = 원본의 키, 오른쪽 = 내 변수.
+- `= 원본` 은 `var`/`let`/`const` 가리지 않고 **필수**(Missing initializer 오류). 「어디서 꺼내라는 건지」가 없으니까.
+- 같은 이름 재선언: `const`·`let` 은 오류, `var` 는 허용(옛 문법의 느슨함 — 그래서 `var` 는 안 쓴다).
+- 배열 버전은 순서로 꺼낸다: `const [count, setCount] = useState(0)`. 매개변수 자리에도 쓴다: `function Greeting({ name, age = 0 })`.
+
+### 객체 리터럴 vs 구조 분해 — 글자는 비슷한데 전혀 다른 문법 ★
+
+갈리는 기준은 **`{ }` 가 `=` 의 어느 쪽에 있느냐**.
+
+| | 코드 | `{ }` 위치 | 뜻 | 풀어 쓰면 |
+|---|---|---|---|---|
+| 객체 리터럴 | `var a = { name: fieldName }` | `=` 오른쪽 | 객체를 **만든다** | `a.name = fieldName` |
+| 구조 분해 | `var { name: fieldName } = a` | `=` 왼쪽 | 객체에서 **꺼낸다** | `fieldName = a.name` |
+
+- 콜론 방향도 반대: 리터럴은 「키 ← 값」, 구조 분해는 「키 → 변수」. 구조 분해는 리터럴을 거울처럼 뒤집은 모양.
+- 키와 변수 이름이 같으면 양쪽 다 `{ name }` 으로 축약돼 더 비슷해 보인다.
+- `Lesson6Form.jsx` 에선 18줄 `const { name, … } = e.target` 이 구조 분해, 19줄 `setForm({ ...form, [name]: … })` 의 `{ }` 는 값 자리라 객체 리터럴 — 한 함수 안에 둘이 나란히 있다.
