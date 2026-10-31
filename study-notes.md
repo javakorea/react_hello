@@ -10,10 +10,11 @@
 | 2026-10-28 | 4단계 끝 · 5단계 조건부·목록 렌더링 시작 |
 | 2026-10-29 | 5단계 끝 — key 실험(id vs 인덱스) · key = 정체를 맞추는 이름표라는 것 정리 |
 | 2026-10-30 | 6단계 폼 끝 — 구조 분해 할당 · 제어 컴포넌트의 흐름(입력→state→value) 이해 · 7단계 state 끌어올리기 끝(컴포넌트 props 의 `onChange` 는 내가 지은 이름 · 형제는 못 찾는다) |
+| 2026-10-31 | 8단계 `useEffect` 시작 — 예제 만들고 실제 콘솔 출력(처음 열기·a·b·시계 숨김/보임·입력)으로 설명 들음 |
 
-**지금 위치: 7단계 끝(2026-10-30). 다음: 8단계 `useEffect` — 예제 만들고 설명 듣기.**
+**지금 위치: 8단계 `useEffect` 하는 중(2026-10-31) — 예제 설명 들음. 다음: 연습(정리 함수 빼 보기 등) → 8단계 끝 → 9단계 서버 호출.**
 
-- 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson7/Lesson7Lifting.jsx` (원래 `./App.jsx`)
+- 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson8/Lesson8Effect.jsx` (원래 `./App.jsx`)
 - 남은 숙제(PC 에서): `src/lesson2/Badge.jsx` 정답 예시를 보고 `Lesson2Props.jsx` 에서 import 해 써 보기
 
 ---
@@ -40,7 +41,7 @@
 | # | 상태 | 주제 | 배울 것 | 견줄 것 |
 |---|---|---|---|---|
 | 7 | ☑ | state 끌어올리기 | 형제 컴포넌트가 값 나누기 · 부모가 state, 자식은 props+콜백 | 그리드 선택 → 상세 폼 |
-| 8 | ☐ | `useEffect` | 그린 뒤 할 일 · 의존성 배열 · 정리 함수 · 두 번 도는 까닭(StrictMode) | `$p.onpageload` |
+| 8 | ◐ | `useEffect` | 그린 뒤 할 일 · 의존성 배열 · 정리 함수 · 두 번 도는 까닭(StrictMode) | `$p.onpageload` |
 | 9 | ☐ | 서버 호출 | `fetch` · 로딩·오류 상태 · moca2026ai 8080 API 불러 보기 | MOCA `tran` / `select.do` |
 | 10 | ☐ | `useRef` | DOM 직접 잡기(포커스) · 다시 그리지 않는 값 보관 | `$p.get('id')` |
 | 11 | ☐ | Context | props 를 여러 층 건너 넘기지 않기 · 로그인 사용자·테마 | `moca.$g` 전역 |
