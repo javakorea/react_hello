@@ -21,7 +21,11 @@ function UserList({ url }) {
       console.log('① 요청', url)
       try {
         await wait(1000)
-        const res = await fetch(url)
+        // Accept 를 안 주면 Vite 가 없는 주소에 index.html(200)을 돌려줘
+        // 404 대신 「JSON 아님」 오류가 난다(실측 2026-11-05)
+        const res = await fetch(url, {
+          headers: { Accept: 'application/json' },
+        })
         if (!res.ok) throw new Error('HTTP ' + res.status)     // fetch 는 404 여도 오류를 안 던진다
         setUsers(await res.json())                              // 글자 → 자바스크립트 객체
       } catch (e) {
