@@ -13,10 +13,11 @@
 | 2026-10-31 | 8단계 `useEffect` 시작 — 예제 만들고 실제 콘솔 출력(처음 열기·a·b·시계 숨김/보임·입력)으로 설명 들음 |
 | 2026-11-02 | 8단계 끝 — 연습 3문제(정리 함수 빼기 · `[a, b]` · 운영 빌드에선 몇 번) · StrictMode 가 두 번 도는 까닭 · 배열 빠뜨리면 낡은 값 · useEffect 가 필요 없는 경우 |
 | 2026-11-04 | 9단계 서버 호출 시작 — `fetch` 예제(목록 세 state · 틀린 주소 · 늦게 온 응답 버리기) |
+| 2026-11-09 | 9단계 설명 들음(한 파일에 컴포넌트 여럿 · 늦게 온 응답 버리기 · 공통 fetch 함수·훅 · 로딩·오류 공통화) · 10단계는 미루고 11단계 Context 시작 — 예제 만듦 |
 
-**지금 위치: 9단계 서버 호출 하는 중(2026-11-04) — 예제 만듦. 다음: 설명 듣기 → 연습 → 8080 API 불러 보기(Vite proxy).**
+**지금 위치: 11단계 Context 하는 중(2026-11-09) — 예제 만듦, 설명 듣는 중. 미룬 것: 9단계 연습·8080 API 불러 보기, 10단계 `useRef`.**
 
-- 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson9/Lesson9Fetch.jsx` (원래 `./App.jsx`)
+- 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson11/Lesson11Context.jsx` (원래 `./App.jsx`)
 - 남은 숙제(PC 에서): `src/lesson2/Badge.jsx` 정답 예시를 보고 `Lesson2Props.jsx` 에서 import 해 써 보기
 
 ---
@@ -46,7 +47,7 @@
 | 8 | ☑ | `useEffect` | 그린 뒤 할 일 · 의존성 배열 · 정리 함수 · 두 번 도는 까닭(StrictMode) | `$p.onpageload` |
 | 9 | ◐ | 서버 호출 | `fetch` · 로딩·오류 상태 · moca2026ai 8080 API 불러 보기 | MOCA `tran` / `select.do` |
 | 10 | ☐ | `useRef` | DOM 직접 잡기(포커스) · 다시 그리지 않는 값 보관 | `$p.get('id')` |
-| 11 | ☐ | Context | props 를 여러 층 건너 넘기지 않기 · 로그인 사용자·테마 | `moca.$g` 전역 |
+| 11 | ◐ | Context | props 를 여러 층 건너 넘기지 않기 · 로그인 사용자·테마 | `moca.$g` 전역 |
 | 12 | ☐ | 커스텀 훅 | `useXxx` 로 로직 재사용 · 규칙(최상단에서만 부르기) | 공통 API 로 올리기 |
 | 13 | ☐ | 성능 | `useMemo`·`useCallback`·`memo` · React Compiler 가 해 주는 것 | — |
 
