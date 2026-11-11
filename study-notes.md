@@ -14,8 +14,9 @@
 | 2026-11-02 | 8단계 끝 — 연습 3문제(정리 함수 빼기 · `[a, b]` · 운영 빌드에선 몇 번) · StrictMode 가 두 번 도는 까닭 · 배열 빠뜨리면 낡은 값 · useEffect 가 필요 없는 경우 |
 | 2026-11-04 | 9단계 서버 호출 시작 — `fetch` 예제(목록 세 state · 틀린 주소 · 늦게 온 응답 버리기) |
 | 2026-11-09 | 9단계 설명 들음(한 파일에 컴포넌트 여럿 · 늦게 온 응답 버리기 · 공통 fetch 함수·훅 · 로딩·오류 공통화) · 10단계는 미루고 11단계 Context 시작 — 예제 만듦 |
+| 2026-11-11 | 11단계 끝 — 연습 4문제 전부 정답(바깥 Provider 를 지우면 · 누가 리렌더링되나 · Provider 없이 읽으면 + null 이면 throw · UserProvider 빈칸) |
 
-**지금 위치: 11단계 Context 하는 중(2026-11-09) — 예제 만듦, 설명 듣는 중. 미룬 것: 9단계 연습·8080 API 불러 보기, 10단계 `useRef`.**
+**지금 위치: 11단계 Context 끝(2026-11-11). 다음: 미뤄 둔 10단계 `useRef` → 12단계 커스텀 훅. 9단계 연습·8080 API 불러 보기도 남아 있음.**
 
 - 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson11/Lesson11Context.jsx` (원래 `./App.jsx`)
 - 남은 숙제(PC 에서): `src/lesson2/Badge.jsx` 정답 예시를 보고 `Lesson2Props.jsx` 에서 import 해 써 보기
@@ -47,7 +48,7 @@
 | 8 | ☑ | `useEffect` | 그린 뒤 할 일 · 의존성 배열 · 정리 함수 · 두 번 도는 까닭(StrictMode) | `$p.onpageload` |
 | 9 | ◐ | 서버 호출 | `fetch` · 로딩·오류 상태 · moca2026ai 8080 API 불러 보기 | MOCA `tran` / `select.do` |
 | 10 | ☐ | `useRef` | DOM 직접 잡기(포커스) · 다시 그리지 않는 값 보관 | `$p.get('id')` |
-| 11 | ◐ | Context | props 를 여러 층 건너 넘기지 않기 · 로그인 사용자·테마 | `moca.$g` 전역 |
+| 11 | ☑ | Context | props 를 여러 층 건너 넘기지 않기 · 로그인 사용자·테마 | `moca.$g` 전역 |
 | 12 | ☐ | 커스텀 훅 | `useXxx` 로 로직 재사용 · 규칙(최상단에서만 부르기) | 공통 API 로 올리기 |
 | 13 | ☐ | 성능 | `useMemo`·`useCallback`·`memo` · React Compiler 가 해 주는 것 | — |
 
@@ -350,7 +351,31 @@ const checked = e.target.checked
 - **할 일이 함수를 돌려주면 그것이 정리 함수.** React 가 들고 있다가 ① 같은 효과를 다시 하기 직전 ② 화면에서 사라질 때 부른다. `[]` 의 정리 함수 ≈ WebSquare `onpageunload`.
 - 한 컴포넌트에 `useEffect` 를 여러 개 써도 된다 — 하는 일마다 하나씩 나누는 게 좋다.
 - **정리 함수를 빼면**: 입력 멈추면 조회(debounce)가 칠 때마다 전부 조회된다(r → re → rea → reac → react 다섯 번). 타이머를 켜기만 하고 안 끈 것.
-- **개발 모드에서 처음에 두 번 도는 까닭**: `<StrictMode>` 가 「마운트 → 언마운트 → 다시 마운트」을 한 번 해 봐서 **정리 함수가 제대로 정리하는지 확인**하려고. 정리 안 한 setInterval 은 개발에서 2→4→6 으로 두 배씩, 운영 빌드에선 1→2→3. 운영(`npm run build`)에서는 한 번만 돈다. (렌더링 자체도 두 번 — 함수가 순수한지 보려고)
+- **개발 모드에서 처음에 두 번 도는 까닭**: `<StrictMode>` 가 「마운트 → 언마운트 → 다시 마운트」를 한 번 해 봐서 **정리 함수가 제대로 정리하는지 확인**하려고. 정리 안 한 setInterval 은 개발에서 2→4→6 으로 두 배씩, 운영 빌드에선 1→2→3. 운영(`npm run build`)에서는 한 번만 돈다. (렌더링 자체도 두 번 — 함수가 순수한지 보려고)
 - **배열을 빠뜨리면 낡은 값**: `[]` 로 둔 타이머 안의 `count` 는 영원히 처음 값 0. 효과 안에서 쓰는 state·props 는 전부 배열에 적는다(린트 `react-hooks/exhaustive-deps` 가 「missing dependency」로 알려 줌).
 - **useEffect 가 필요 없는 경우**: 다른 state 에서 계산되는 값(성 + 이름 → 전체 이름)은 렌더링 때 계산한다. effect 로 맞추면 한 번 렌더링한 뒤 리렌더링해 **잠깐 어긋난 값(「김 / 홍길동」)이 보이고 렌더링도 두 번**이다.
 - `useState(() => new Date())` — 함수로 넘기면 처음 한 번만 부른다(렌더링할 때마다 Date 를 만들지 않게. 린트 react(purity) 경고도 사라짐).
+
+## 12. Context (11단계) — `src/lesson11/Lesson11Context.jsx`
+
+- **풀려는 문제 = prop drilling**: 중간 컴포넌트가 쓰지도 않는 props 를 아래로 넘기려고 받아야 한다.
+- 순서 세 줄: ① `createContext(기본값)` 로 Context 를 만든다 ② `<Context value={값}>`(Provider)로 감싼다 ③ 아래 어디서든 `useContext(Context)` 로 value 를 읽는다. 중간 컴포넌트는 props 가 없다.
+- `createContext` 는 **컴포넌트 함수 밖**에서 한 번 — 안에 두면 렌더링마다 새 Context 가 생기고, 다른 컴포넌트에서는 보이지도 않는다(Java 의 `static final` 필드).
+  여러 파일이 쓰면 그 Context 를 `export` 하고 쓰는 쪽에서 `import` 한다 — Provider 와 consumer 가 **같은 Context 객체**여야 한다.
+- `createContext` 가 돌려주는 것은 함수가 아니라 **객체**다(`$$typeof`·`Provider`·`Consumer`). React 19 는 그 객체를 그대로 Provider 로 쓰게 해 준다 — `<Ctx value>` = 옛 표기 `<Ctx.Provider value>`. 이름이 대문자여야 JSX 태그로 쓸 수 있다.
+- Provider 의 props 는 **`value` 하나**(+ 감싼 내용 `children`). `user={me}` 처럼 다른 이름을 쓰면 value 가 없는 것으로 보고 `undefined` 가 나온다.
+- **가장 가까운 Provider 가 이긴다**: `useContext` 는 위로 올라가며 처음 만난 Provider 의 value 를 쓴다. 겹쳐 쓰면 화면 일부만 값을 바꿀 수 있다(어두운 앱 안의 밝은 인쇄 미리보기). 블록 안 변수 섀도잉 · CSS 변수의 가까운 조상 값과 같은 원리.
+  Provider 가 하나도 없을 때만 `createContext(…)` 의 기본값이 나온다.
+- 기준은 **코드를 쓴 자리도, DOM 도 아니고 컴포넌트 트리(JSX 에 놓은 자리)**. Provider 는 DOM 에 아무것도 남기지 않고, 포털로 DOM 을 `body` 밑에 옮겨도 Context 는 JSX 자리를 따라간다. MOCA 의 `$p` 스코프는 DOM(frame) 기준이라 다르다.
+- **Context 는 화면 조각이 아니라 value 를 아래로 전달하는 통로**. 기억은 `useState`, 전달은 Context, 화면은 JSX — 세 역할이 따로다. 예제 ④ 의 로딩바 `<div>` 는 Context 가 아니라 `LoadingProvider` 컴포넌트가 렌더링한 보통 JSX 다.
+- **실무 모양 = Provider 컴포넌트**: state + Context 를 한 컴포넌트에 묶고 `children` 을 감싼다(`ThemeProvider`·`UserProvider`). 이름의 Provider 는 관례일 뿐이다. value 에 값과 바꾸는 함수를 함께 싣는다(`{ theme, toggle }`).
+- **리렌더링 범위(연습 2번 실측)**: 테마를 바꾸면 state 주인 `ThemeProvider` 와 그 Context 를 읽는 consumer(`ThemeBox`·`ThemeButton`)만 리렌더링된다. `NoTheme` 은 Provider 안에 있어도 Context 를 안 읽고, 부모가 만든 `children` 이라 리렌더링되지 않는다.
+- **Provider 없이 읽으면(연습 3번 실측)**: 기본값 `null` 을 구조 분해하다 `TypeError` → React 는 root 화면 전체를 언마운트한다(멀쩡한 형제까지 빈 화면). 그래서 커스텀 훅은 `if (ctx === null) throw new Error('… Provider 안에서만 쓰세요')` 로 원인을 알려 주고, 기본값은 일부러 `null` 로 둔다.
+- `useContext` 같은 hook 은 **컴포넌트나 `use…` 이름의 함수(커스텀 hook)의 맨 위 단계**에서만 부른다. 그래서 보통 함수 `api()` 대신 `useApi()` 가 Context 에서 `start`·`end` 를 읽고 `api` 함수를 돌려준다(12단계 미리보기). 조건·반복·이벤트 함수 안에서는 못 부른다 — React 가 hook 을 부른 순서로 구분하기 때문.
+- `setTheme(t => …)` 의 `t` 는 React 가 넣어 준다 — 함수를 받는 쪽이 인자를 채워 부른다(`map` 과 같다, Java `AtomicReference.updateAndGet`).
+
+### 곁가지로 나온 것
+
+- **전역 변수**: Vite 는 모듈이라 `main.jsx` 의 `var a` 는 다른 파일에서 안 보인다. `window.a` 는 보이지만 바꿔도 리렌더링되지 않는다. 바뀌지 않는 값은 모듈 `export const`, 화면에 보이는 값은 state·Context.
+- **import 는 파일마다** 해야 한다(Java 도 같다). 줄이는 법: 공통을 `index.js` 한 곳에서 다시 export(배럴) + `vite.config.js` 의 `@` 별칭 + 편집기 자동 import.
+- **Zustand**(추스탄트 · 흔히 주스탄드): Provider 없이 쓰는 전역 state 라이브러리. 고른 값이 바뀐 컴포넌트만 리렌더링되고, `useStore.getState()` 로 보통 함수에서도 읽고 바꾼다 — 16단계.
