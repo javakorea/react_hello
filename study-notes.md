@@ -15,9 +15,9 @@
 | 2026-11-04 | 9단계 서버 호출 시작 — `fetch` 예제(목록 세 state · 틀린 주소 · 늦게 온 응답 버리기) |
 | 2026-11-09 | 9단계 설명 들음(한 파일에 컴포넌트 여럿 · 늦게 온 응답 버리기 · 공통 fetch 함수·훅 · 로딩·오류 공통화) · 10단계는 미루고 11단계 Context 시작 — 예제 만듦 |
 | 2026-11-11 | 11단계 끝 — 연습 4문제 전부 정답(바깥 Provider 를 지우면 · 누가 리렌더링되나 · Provider 없이 읽으면 + null 이면 throw · UserProvider 빈칸) |
-| 2026-11-11 | 10단계 `useRef` 시작 — 예제 만듦(DOM 포커스 · let/state/ref 비교 · 타이머 ID · React 19 의 ref props) |
+| 2026-11-11 | 10단계 `useRef` 시작 — 예제 만듦(DOM 포커스 · let/state/ref 비교 · 타이머 ID · React 19 의 ref props) · 설명 들음(ref 는 찾기가 아니라 React 가 만들며 넣기 · 값은 fiber 에 저장 · 인스턴스마다 따로 · key 로 초기화) · 용어를 React 업계 말로 통일 |
 
-**지금 위치: 10단계 `useRef` 하는 중(2026-11-11) — 예제 만듦, 설명 듣는 중. 다음: 12단계 커스텀 훅. 9단계 연습·8080 API 불러 보기도 남아 있음.**
+**지금 위치: 10단계 `useRef` 하는 중(2026-11-11) — 예제·설명 끝, 다음은 연습. 그 뒤 12단계 커스텀 훅. 9단계 연습·8080 API 불러 보기도 남아 있음.**
 
 - 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson10/Lesson10Ref.jsx` (원래 `./App.jsx`)
 - 남은 숙제(PC 에서): `src/lesson2/Badge.jsx` 정답 예시를 보고 `Lesson2Props.jsx` 에서 import 해 써 보기
@@ -380,3 +380,38 @@ const checked = e.target.checked
 - **전역 변수**: Vite 는 모듈이라 `main.jsx` 의 `var a` 는 다른 파일에서 안 보인다. `window.a` 는 보이지만 바꿔도 리렌더링되지 않는다. 바뀌지 않는 값은 모듈 `export const`, 화면에 보이는 값은 state·Context.
 - **import 는 파일마다** 해야 한다(Java 도 같다). 줄이는 법: 공통을 `index.js` 한 곳에서 다시 export(배럴) + `vite.config.js` 의 `@` 별칭 + 편집기 자동 import.
 - **Zustand**(추스탄트 · 흔히 주스탄드): Provider 없이 쓰는 전역 state 라이브러리. 고른 값이 바뀐 컴포넌트만 리렌더링되고, `useStore.getState()` 로 보통 함수에서도 읽고 바꾼다 — 16단계.
+
+## 13. useRef (10단계) — `src/lesson10/Lesson10Ref.jsx`
+
+- **한 줄**: 리렌더링돼도 사라지지 않는 값 하나(`{ current }` 객체). 다만 `current` 를 바꿔도 리렌더링되지 않는다.
+
+| | 바꾸면 리렌더링 | 리렌더링 뒤 값 | 쓰는 곳 |
+|---|---|---|---|
+| `let` | ✗ | 처음 값으로 돌아감 | 함수 안 잠깐 계산 |
+| `useState` | ✓ | 남음 | 화면에 보이는 값 |
+| `useRef` | ✗ | 남음 | 화면과 상관없는 값 · DOM |
+
+- 실측(예제 ②): [let +1]·[ref +1] 을 눌러도 화면은 0. [리렌더링만] 을 누르자 ref 는 2 로 나타나고 let 은 0 으로 돌아갔다.
+- **MOCA 대응표** — 이것만 알면 쓴다:
+
+| 하는 일 | MOCA | React |
+|---|---|---|
+| 이름 정하기 | (id 로) | `const nameRef = useRef(null)` |
+| 태그에 붙이기 | `id="name"` | `ref={nameRef}` |
+| 쓰기 | `$p.get('name').focus()` | `nameRef.current.focus()` |
+| 값 걸어 두기 | `$p.timer = setInterval(…)` | `timerRef.current = setInterval(…)` |
+
+- `nameRef.current` 는 MOCA 컴포넌트가 아니라 **브라우저의 진짜 DOM 요소**(`HTMLInputElement` — `getElementById` 결과와 같은 객체). `setValue` 는 없다(실측: `setValue is not a function`). **값 넣기·읽기는 state, 포커스·스크롤·크기처럼 DOM 이 아니면 못 하는 일만 ref.** 제어 컴포넌트에 `current.value = …` 를 하면 다음 리렌더링에 state 값으로 덮인다.
+- **DOM 은 찾는 것이 아니라 React 가 만들면서 넣어 준다**: JSX 는 객체 설계도이고 `ref` 는 그 객체의 props 에 붙어서 넘어간다(실측: `input` 객체 `props.ref === inputRef`). React 가 그 요소를 만들어 마운트한 뒤 `current` 에 넣고, 언마운트하면 `null` 로 돌린다. 그래서 id 가 필요 없고, 같은 컴포넌트를 두 번 써도 각자 자기 DOM 을 잡는다. `ref` 속성은 DOM 에 남지 않는다(`key` 와 같음).
+- 마운트 뒤에 채워지므로 **렌더링 중(컴포넌트 본문·JSX)에는 `current` 를 읽거나 쓰지 않는다** — 이벤트 함수·`useEffect` 안에서만. MOCA 에서 `$p.get()` 을 `onpageload` 뒤에 쓰는 것과 같다.
+- **리렌더링 ≠ DOM 다시 만들기**: 다시 계산하는 것은 JSX 이고 DOM 은 처음 마운트 때 만든 것을 그대로 쓴다. ref 도 계속 같은 DOM(실측: 리렌더링 2번 뒤 `===` true).
+- **나중에 나타나는 요소**: `{show && <input ref={r} />}` 는 `null` → 보이면 DOM → 숨기면 `null`(실측). **개수가 바뀌는 목록**은 hook 을 반복문에서 못 부르므로 `ref` 에 함수(ref 콜백)를 주고 `Map` 에 id → DOM 을 넣고 뺀다(실측: [1,2] → [1,2,3] → [2,3]).
+- **React 가 만들지 않은 DOM** 에는 `ref` 속성을 못 붙인다 — `useEffect` 에서 `getElementById` 로 찾아 ref 에 담는다(React 는 그 DOM 을 몰라 리렌더링 대상이 아니다). `createRoot(document.getElementById('root'))`·`createPortal` 은 이미 있는 DOM 안에 React 가 렌더링하는 것, 서버 HTML 을 이어받는 hydration 은 그 DOM 에 ref 가 연결되는 경우.
+- **왜 0 으로 안 돌아가나**: `useRef(0)` 의 0 은 처음 마운트 때만 쓰인다. 값은 함수 밖, 컴포넌트마다 있는 **fiber** 에 hook 을 부른 순서대로 저장되고, 리렌더링 때는 지난번 객체를 돌려준다(Java `computeIfAbsent`). `useState` 도 같은 방식 — 그래서 hook 순서 규칙(조건·반복 안 금지)이 있다.
+- **전역 변수가 아니다**: 컴포넌트를 쓸 때마다 따로 생기고 언마운트하면 사라진다(실측: A 2 · B 1, B 를 숨겼다 보이자 B 만 0). Java 의 `static` 이 아니라 인스턴스 필드, MOCA 의 `moca.$g` 가 아니라 화면마다 따로인 `$p`.
+- **초기화**: ref 하나는 `ref.current = 0`, state 하나는 `setState(0)`, 컴포넌트 안 전부는 **부모에서 `key` 를 바꾼다** — 다른 컴포넌트로 보고 언마운트 → 마운트(실측: ref 5·state 3 → 0·0). 실무: `<UserForm key={selectedId} />` 로 사람을 바꿀 때마다 폼을 새로 시작.
+- `current` 에는 무엇이든 담는다(숫자·문자열·배열·Map·DOM·타이머 ID). 내가 넣으면 내 값, 태그에 붙이면 React 가 DOM 을 넣는다 — **DOM 용 ref 와 값 보관용 ref 는 따로** 만든다(태그에 붙인 ref 는 React 가 덮어쓴다). DOM 용은 `useRef(null)` + 이름 끝 `Ref`.
+- **타이머 ID 는 ref 에**(예제 ③ 실측): let 에 두면 50ms 마다 리렌더링될 때 `null` 로 돌아가 [멈춤] 이 `clearInterval(null)` 이 되어 안 멈췄다. ref 쪽은 멈췄다.
+- **서버 목록을 ref 에 담으면** 도착해도 리렌더링되지 않아 화면이 빈 채로 남는다 → 화면에 보이는 데이터는 state. 다시 조회할지는 담는 곳이 아니라 `useEffect` 배열이 정한다(`[]` 면 다른 state 가 바뀌어도 다시 조회 안 함). 언마운트를 넘어 남기려면 끌어올리기·Context·TanStack Query(15단계).
+- **실무에서 자주 쓰는 곳**: ① 저장 전 검사에 걸린 input 에 포커스 ② 채팅·로그 맨 아래로 `scrollIntoView` ③ ECharts 같은 외부 라이브러리에 DOM 넘기기(`echarts.init(ref.current)`) ④ 바깥을 누르면 드롭다운 닫기(`ref.current.contains(e.target)`) ⑤ 타이머 ID. DOM 잡기 쪽이 훨씬 많다.
+- **React 19**: 자식 컴포넌트도 `ref` 를 보통 props 로 받는다(`function NameInput({ ref })`). 18 까지는 `forwardRef(…)` 로 감쌌다.
