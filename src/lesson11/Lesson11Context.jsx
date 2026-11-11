@@ -1,9 +1,9 @@
-// 11단계 — Context: props 를 층층이 넘기지 않고 「위에서 넣고 아래 어디서든 꺼내기」
-// 핵심: createContext 로 상자를 만들고 → <상자 value={값}> 로 감싸면(Provider)
-//       그 아래 몇 층이든 useContext(상자) 한 줄로 값을 꺼낸다. 중간 컴포넌트는 몰라도 된다.
-//       value 가 바뀌면 그 값을 꺼내 쓰는 컴포넌트가 다시 그려진다 — moca.$g 와 다른 점(③).
-// React 19 부터 <상자 value> 로 바로 감싼다. 옛 코드에서는 <상자.Provider value> 로 쓴다(같은 뜻).
-// F12 콘솔을 열고 보세요. 개발 모드(StrictMode)에서는 그리기 로그가 두 번씩 찍힌다(8단계).
+// 11단계 — Context: props 를 층층이 넘기지 않고, 위쪽 Provider 가 준 value 를 아래 어디서든 읽기
+// 핵심: createContext 로 Context 를 만들고 → <Context value={값}>(Provider)로 감싸면
+//       그 아래 몇 층이든 useContext(Context) 한 줄로 value 를 읽는다. 중간 컴포넌트는 몰라도 된다.
+//       value 가 바뀌면 그 Context 를 읽는(consumer) 컴포넌트가 리렌더링된다 — moca.$g 와 다른 점(③).
+// React 19 부터 <Context value> 를 그대로 Provider 로 쓴다. 옛 코드에서는 <Context.Provider value> 로 쓴다(같은 뜻).
+// F12 콘솔을 열고 보세요. 개발 모드(StrictMode)에서는 렌더링 로그가 두 번씩 찍힌다(8단계).
 
 import { createContext, useContext, useState } from 'react'
 
@@ -22,8 +22,8 @@ function Page1({ user }) {                                             // ← �
   return <Header1 user={user} />
 }
 
-// ───────── ② Context — 위에서 넣고, 아래에서 꺼낸다 ─────────
-// 괄호 안 = Provider 로 감싸지 않은 곳에서 꺼냈을 때 나오는 기본값
+// ───────── ② Context — Provider 가 value 를 주고, 아래에서 useContext 로 읽는다 ─────────
+// 괄호 안 = Provider 밖에서 useContext 로 읽었을 때 나오는 기본값
 const UserContext = createContext({ name: '(로그인 안 함)' })
 
 function Badge2() {
@@ -39,7 +39,7 @@ function Page2() {                                                     // props 
 
 // ───────── ③ 바뀌는 값 — state 를 Context 로 나눠 주기 ─────────
 // 실무 모양: state 를 가진 「Provider 컴포넌트」를 하나 만들고 children 을 감싼다.
-// 테마가 바뀌면 ThemeContext 를 꺼내 쓰는 ThemeBox·ThemeButton 만 다시 그려진다. NoTheme 은 안 그려진다(콘솔).
+// 테마가 바뀌면 ThemeContext 를 읽는 ThemeBox·ThemeButton 만 리렌더링된다. NoTheme 은 리렌더링되지 않는다(콘솔).
 const ThemeContext = createContext(null)
 
 function ThemeProvider({ children }) {
@@ -54,7 +54,7 @@ function ThemeProvider({ children }) {
 
 function ThemeBox() {
   const { theme } = useContext(ThemeContext)
-  console.log('③ ThemeBox 그리기 —', theme)
+  console.log('③ ThemeBox 렌더링 —', theme)
   const dark = theme === 'dark'
   return (
     <div style={{ padding: 8, background: dark ? '#333' : '#eee', color: dark ? '#fff' : '#000' }}>
@@ -64,16 +64,16 @@ function ThemeBox() {
 }
 function ThemeButton() {
   const { theme, toggle } = useContext(ThemeContext)
-  console.log('③ ThemeButton 그리기')
+  console.log('③ ThemeButton 렌더링')
   return <button onClick={toggle}>{theme === 'dark' ? '밝게' : '어둡게'}</button>
 }
 function NoTheme() {
-  console.log('③ NoTheme 그리기 — Context 안 씀')
-  return <p>Context 를 안 쓰는 칸 — 테마를 바꿔도 다시 안 그려진다</p>
+  console.log('③ NoTheme 렌더링 — Context 안 씀')
+  return <p>Context 를 안 쓰는 컴포넌트 — 테마를 바꿔도 리렌더링되지 않는다</p>
 }
 
 // ───────── ④ 전역 로딩바 — MOCA tran 처럼 화면은 로딩을 신경 쓰지 않게 ─────────
-// 로딩 상태를 LoadingProvider 한 곳이 들고, 맨 위에 로딩바를 그린다.
+// 로딩 상태를 LoadingProvider 한 곳이 들고, 맨 위에 로딩바를 렌더링한다.
 // 화면은 useApi() 가 준 api() 만 부른다 — 로딩바를 켜고 끄는 것은 api() 가 한다.
 // 실제 앱에서는 main.jsx 에서 <App /> 전체를 감싼다. 여기서는 ④ 안에만 감쌌다.
 const LoadingContext = createContext(null)
@@ -150,7 +150,7 @@ function Lesson11Context() {
       <h3>① props 로 층층이 넘기기 — 중간이 다 받아야 한다</h3>
       <Page1 user={me} />
 
-      <h3>② Context — 위에서 넣고 아래에서 꺼낸다</h3>
+      <h3>② Context — Provider 가 주고 useContext 로 읽는다</h3>
       <UserContext value={me}>
         <Page2 />                                                      {/* 홍길동 */}
         <UserContext value={{ name: '김영희' }}>
@@ -159,7 +159,7 @@ function Lesson11Context() {
       </UserContext>
       <Page2 />                                                        {/* Provider 밖 — createContext 의 기본값 */}
 
-      <h3>③ 바뀌는 값 — 꺼내 쓰는 쪽만 다시 그린다(콘솔)</h3>
+      <h3>③ 바뀌는 값 — Context 를 읽는 쪽만 리렌더링(콘솔)</h3>
       <ThemeProvider>
         <ThemeBox />
         <p><ThemeButton /></p>

@@ -34,9 +34,9 @@
 | 0 | ☑ | 환경 | Vite·npm·프로젝트 구조(`main.jsx` → `App.jsx`) | Maven·W-Pack (아래 1·2절) |
 | 1 | ☑ | JSX | `{}` 안의 JS 식 · `className` · 태그 닫기 · `<>` 조각 · 주석 | MOCA HTML 화면 |
 | 2 | ☑ | 컴포넌트와 props | 함수 하나 = 컴포넌트 · props 로 값 넘기기 · `children` · 파일 나누기 | MOCA 컴포넌트 `data-m-*` 속성 |
-| 3 | ☑ | state — `useState` | 값이 바뀌면 다시 그리기 · 불변성(배열·객체는 새로 만들기) | MOCA `setValue` → 화면 갱신 |
+| 3 | ☑ | state — `useState` | 값이 바뀌면 리렌더링 · 불변성(배열·객체는 새로 만들기) | MOCA `setValue` → 화면 갱신 |
 | 4 | ☑ | 이벤트 | `onClick`·`onChange` · 이벤트 객체 · 함수 넘기기 vs 부르기 | MOCA `data-m-onclick` |
-| 5 | ☑ | 조건부·목록 렌더링 | `&&`·삼항 · `map()` · `key` 가 필요한 까닭 | 그리드 행 그리기 |
+| 5 | ☑ | 조건부·목록 렌더링 | `&&`·삼항 · `map()` · `key` 가 필요한 까닭 | 그리드 행 렌더링 |
 | 6 | ☑ | 폼 | 제어 컴포넌트(input 값 = state) · 여러 칸 한 객체로 · 검증 | MOCA form 컴포넌트 |
 
 ### 중급 — 화면을 나누고 데이터를 다루기
@@ -210,31 +210,31 @@ jsx("button", {
 
 | | A 가 참 같으면 | A 가 거짓 같으면 | 쓰는 곳 |
 |---|---|---|---|
-| `A && B` | B | A | `{isVip && '⭐'}` — 참일 때만 그리기 |
+| `A && B` | B | A | `{isVip && '⭐'}` — 참일 때만 렌더링 |
 | `A \|\| B` | A | B | `{name \|\| '손님'}` — 기본값 |
 | `A ?? B` | A | A 가 `null`·`undefined` 일 때만 B | 0·`''` 이 정상값일 때 |
 
 - 거짓 같은 값: `false` `0` `''` `null` `undefined` `NaN`.
-- `if (a && b)` 가 불린처럼 보이는 건 **`if` 가 참/거짓으로 바꿔서**다. JSX 의 `{}` 는 안 바꾸고 그 값을 그린다.
-- React 는 `false`·`null`·`undefined`·`true` 는 안 그리지만 **숫자 `0` 은 그린다** → `{count && ...}` 대신 `{count > 0 && ...}`.
+- `if (a && b)` 가 불린처럼 보이는 건 **`if` 가 참/거짓으로 바꿔서**다. JSX 의 `{}` 는 안 바꾸고 그 값을 렌더링한다.
+- React 는 `false`·`null`·`undefined`·`true` 는 렌더링하지 않지만 **숫자 `0` 은 렌더링한다** → `{count && ...}` 대신 `{count > 0 && ...}`.
 
 ## 5. state (3단계) — `src/lesson3/Lesson3State.jsx`
 
-- `const [count, setCount] = useState(0)` — 값과 바꾸는 함수 한 쌍. **바꾸는 함수를 불러야 다시 그린다.**
-- 일반 변수(`let`)는 바뀌어도 화면이 안 바뀌고, 다시 그릴 때마다 처음 값으로 돌아간다(함수를 새로 부르니까).
-- 다시 그리기 = 컴포넌트 함수를 **처음부터 다시 부르는 것**. `useState` 만 이전 값을 기억해 돌려준다.
+- `const [count, setCount] = useState(0)` — 값과 바꾸는 함수 한 쌍. **바꾸는 함수를 불러야 리렌더링된다.**
+- 일반 변수(`let`)는 바뀌어도 화면이 안 바뀌고, 리렌더링할 때마다 처음 값으로 돌아간다(함수를 새로 부르니까).
+- 리렌더링 = 컴포넌트 함수를 **처음부터 다시 부르는 것**. `useState` 만 이전 값을 기억해 돌려준다.
 - **불변성**: 배열·객체는 고치지 말고 새로 만든다 — `[...items, '귤']`, `{ ...user, age: 31 }`.
-  `push` 후 같은 배열을 넘기면 React 가 「주소가 같다 = 안 바뀌었다」고 보고 안 그린다(Java 의 `==` 비교).
+  `push` 후 같은 배열을 넘기면 React 가 「주소가 같다 = 안 바뀌었다」고 보고 리렌더링하지 않는다(Java 의 `==` 비교).
 - 지우기는 `filter`, 고치기는 `map` 으로 새 배열을 만든다.
 - MOCA 에 견주면: `setValue` 를 부르면 화면이 바뀌는 것과 같지만, React 는 **화면 전체를 함수로 다시 계산**하고 바뀐 곳만 DOM 에 반영한다.
 
 ## 6. 이벤트 (4단계) — `src/lesson4/Lesson4Event.jsx`
 
 - `on` + 카멜 표기(`onClick`·`onChange`·`onSubmit`·`onKeyDown`)에 **함수를 넘긴다**.
-- **넘기기 vs 부르기**: `onClick={handle}` ✅ / `onClick={handle()}` ❌ — 그릴 때 바로 실행된다. 안에서 setState 하면 무한 반복.
+- **넘기기 vs 부르기**: `onClick={handle}` ✅ / `onClick={handle()}` ❌ — 렌더링할 때 바로 실행된다. 안에서 setState 하면 무한 반복.
 - 인자가 필요하면 화살표로 감싼다: `onClick={() => remove(id)}`.
 - 이벤트 객체 `e`: `e.target.value`(입력값) · `e.preventDefault()`(폼 제출 시 새로고침 막기).
-- 한 핸들러 안에서 `setCount(count + 1)` 을 세 번 해도 +1 — `count` 는 이번 그리기 때의 값으로 고정돼 있다.
+- 한 핸들러 안에서 `setCount(count + 1)` 을 세 번 해도 +1 — `count` 는 이번 렌더링 때의 값으로 고정돼 있다.
   이전 값 기준으로 쌓으려면 함수로 넘긴다: `setCount(c => c + 1)`.
 - MOCA 에 견주면 `data-m-onclick="fn"` 과 같지만, 문자열이 아니라 **함수 자체**를 넘긴다(Java 의 람다·메서드 참조 `this::handle`).
 
@@ -242,12 +242,12 @@ jsx("button", {
 
 - JSX 의 `{}` 안에는 **식**만 → `if` 대신 삼항·`&&`, `for` 대신 `map()`. `if` 는 return 위(JSX 밖)에서 변수에 담아 쓰면 된다.
 - `{조건 && <p>…</p>}` — 참일 때만. `{users.length && …}` 는 0명일 때 「0」이 찍히므로 `length > 0 &&`.
-- 걸러진 목록(`shown`)은 state 가 아니라 **그릴 때 계산하는 값** — state 는 원본 하나만 둔다.
+- 걸러진 목록(`shown`)은 state 가 아니라 **렌더링 때 계산하는 값** — state 는 원본 하나만 둔다.
 - 삭제: `setUsers(users.filter(x => x.id !== u.id))` — `u` 는 `map` 이 행마다 따로 만든 화살표 함수가 기억하는 그 행의 사람(클로저). 원본은 안 건드리고 새 배열로 교체(불변성).
 
 ### key — 「바뀐 여부」가 아니라 **「누가 누구인가」** 를 맞추는 이름표 ★
 
-다시 그리기는 ① state 가 바뀌면 함수가 다시 돌아 **새 JSX 전체**가 만들어진다 → ② React 가 이전 JSX 와 비교하며 목록은 **같은 key 끼리 짝을 짓는다** → ③ 짝이 맞으면 DOM 재사용(달라진 글자·속성만 고침), 새 key 는 DOM 새로 만듦, 사라진 key 는 DOM 지움.
+리렌더링은 ① state 가 바뀌면 함수가 다시 돌아 **새 JSX 전체**가 만들어진다 → ② React 가 이전 JSX 와 비교하며 목록은 **같은 key 끼리 짝을 짓는다** → ③ 짝이 맞으면 DOM 재사용(달라진 글자·속성만 고침), 새 key 는 DOM 새로 만듦, 사라진 key 는 DOM 지움.
 
 | key | React 가 하는 일 | 결과 |
 |---|---|---|
@@ -255,7 +255,7 @@ jsx("button", {
 | 새 key | DOM 새로 만듦 | 빈 input |
 | 사라진 key | DOM 지움 | 그 줄의 입력값도 사라짐 |
 
-- 「안 바뀌면 안 그린다」는 key 의 일이 아니다 — 그건 3단계 「같은 배열 주소면 다시 안 그림」과 13단계 `memo` 이야기.
+- 「안 바뀌면 리렌더링하지 않는다」는 key 의 일이 아니다 — 그건 3단계 「같은 배열 주소면 리렌더링 안 함」과 13단계 `memo` 이야기.
 - 재사용의 이점은 속도보다 **DOM 이 들고 있는 것(제어 안 된 input 값 등)이 보존되는 것** — 실제 버그는 여기서 난다.
 
 **실험(④)**: 홍길동 메모 칸에 글 적고 「맨 앞에 추가」.
@@ -305,19 +305,19 @@ const checked = e.target.checked
 - `onChange` 를 빼면 글자가 안 쳐지는 것처럼 보인다 — **막는 게 아니라** 들어온 글자를 이벤트 직후 `value`(`''`)로 되돌리기 때문. React 가 「read-only field」 경고를 낸다.
   그래서 `onChange` 안에서 값을 손보면(숫자만 남기기 등) 저장 단계 하나로 입력 제한이 된다.
 - React 는 **DOM 을 스캔하지 않는다.** state 가 바뀌면 함수를 다시 불러 새 JSX 를 만들고, **이전 JSX 와 새 JSX** 를 비교해 달라진 DOM 만 고친다. 키 하나마다 「계산은 전체, DOM 반영은 바뀐 곳만」.
-- 다시 그려지는 범위는 **state 를 가진 컴포넌트와 그 아래**. 위(`main.jsx`)는 안 돈다.
+- 리렌더링되는 범위는 **state 를 가진 컴포넌트와 그 아래**. 위(`main.jsx`)는 안 돈다.
 - 칸 여러 개는 객체 하나 `form` 에 모으고, `<input name="email">` 의 `name` 을 열쇠로 `setForm({ ...form, [name]: value })`. **`name` 속성 = state 객체의 키**라는 약속. 체크박스는 `value` 대신 `checked`.
-- 검증(`errors`)은 state 가 아니라 **그릴 때 계산** — 5단계 `shown` 과 같은 원칙. `disabled={!isValid}` 로 버튼을 막는다.
+- 검증(`errors`)은 state 가 아니라 **렌더링 때 계산** — 5단계 `shown` 과 같은 원칙. `disabled={!isValid}` 로 버튼을 막는다.
 - 제출은 `e.preventDefault()` 로 새로고침을 막고 **DOM 이 아니라 `form` state 를 쓴다.** `setForm(빈값)` 하면 모든 칸이 비워진다 — 진실은 state 에 있으니까.
 - 견주기: MOCA 는 `data-m-id` 와 데이터 필드를 맞춰 엔진이 DOM 값을 읽어 오지만, React 는 DOM 을 읽지 않고 state 만 본다. input 은 state 를 **보여 주는 창**.
 
 ## 10. state 끌어올리기 (7단계) — `src/lesson7/Lesson7Lifting.jsx`
 
 - **형제 컴포넌트는 서로를 모른다** — React 엔 MOCA 의 `$p.get('id')` 같은 「id 로 아무 컴포넌트나 찾는 목록」이 없다. 컴포넌트는 자기 props 만 받는 함수.
-  DOM 을 `querySelector` 로 뒤져 형제 input 을 고칠 수는 있지만 state 가 안 바뀌니 다음 그리기에 되돌려진다(6단계 원리).
+  DOM 을 `querySelector` 로 뒤져 형제 input 을 고칠 수는 있지만 state 가 안 바뀌니 다음 렌더링에 되돌려진다(6단계 원리).
 - 그래서 둘이 같은 값을 쓰면 **가장 가까운 공통 부모로 올린다.** 부모가 state, 자식은 `value`(props) + `onChange`(콜백). 데이터는 아래로, 바꾸라는 요청은 위로 — 단방향 흐름.
 - 이점: 값이 바뀌는 코드가 **state 를 가진 부모 한 곳**에만 있어 추적이 쉽다. MOCA 는 어디서든 `setValue` 할 수 있어 편하지만 큰 화면에선 누가 바꿨는지 찾기 어렵다.
-- `selected = users.find(...)` 는 state 아님 — 그릴 때 계산(5·6단계와 같은 원칙). 따로 state 로 두면 `users` 와 어긋난다.
+- `selected = users.find(...)` 는 state 아님 — 렌더링 때 계산(5·6단계와 같은 원칙). 따로 state 로 두면 `users` 와 어긋난다.
 - 부모가 바꿀 때는 `users.map(u => u.id === changed.id ? changed : u)` — 한 명만 교체한 새 배열(불변성).
 
 ### 컴포넌트에 쓴 `onChange`·`onSelect` 는 **내가 지은 props 이름** — HTML 이벤트가 아니다 ★
@@ -333,7 +333,7 @@ const checked = e.target.checked
 ### 그 밖에 걸렸던 것
 
 - `{' '}` = 공백 한 칸. JSX 는 태그 사이 **줄바꿈·들여쓰기 공백을 버리므로** 띄우려면 문자열로 명시. 같은 줄에 쓰면 필요 없음. 실무선 CSS `gap`.
-- 컴포넌트 함수는 **밖**(안에 두면 부모가 그려질 때마다 새 컴포넌트로 보여 state·DOM 이 날아감), 핸들러는 **안**(지역 변수 `users`·`setUsers` 를 써야 하니까). Java 로 치면 별도 클래스 vs private 메서드.
+- 컴포넌트 함수는 **밖**(안에 두면 부모가 렌더링될 때마다 새 컴포넌트로 보여 state·DOM 이 날아감), 핸들러는 **안**(지역 변수 `users`·`setUsers` 를 써야 하니까). Java 로 치면 별도 클래스 vs private 메서드.
 
 ## 11. useEffect (8단계) — `src/lesson8/Lesson8Effect.jsx`
 
@@ -342,7 +342,7 @@ const checked = e.target.checked
 
 | 배열 | 언제 도나 | 견주기 |
 |---|---|---|
-| 없음 | 그릴 때마다 | — |
+| 없음 | 렌더링할 때마다 | — |
 | `[]` | 처음 한 번 | `$p.onpageload` |
 | `[a]` | 처음 + `a` 가 바뀔 때 | — |
 | `[a, b]` | 처음 + 둘 중 하나라도 바뀔 때 | — |
@@ -350,7 +350,7 @@ const checked = e.target.checked
 - **할 일이 함수를 돌려주면 그것이 정리 함수.** React 가 들고 있다가 ① 같은 효과를 다시 하기 직전 ② 화면에서 사라질 때 부른다. `[]` 의 정리 함수 ≈ WebSquare `onpageunload`.
 - 한 컴포넌트에 `useEffect` 를 여러 개 써도 된다 — 하는 일마다 하나씩 나누는 게 좋다.
 - **정리 함수를 빼면**: 입력 멈추면 조회(debounce)가 칠 때마다 전부 조회된다(r → re → rea → reac → react 다섯 번). 타이머를 켜기만 하고 안 끈 것.
-- **개발 모드에서 처음에 두 번 도는 까닭**: `<StrictMode>` 가 「붙였다 → 뗐다 → 다시 붙임」을 한 번 해 봐서 **정리 함수가 제대로 정리하는지 확인**하려고. 정리 안 한 setInterval 은 개발에서 2→4→6 으로 두 배씩, 운영 빌드에선 1→2→3. 운영(`npm run build`)에서는 한 번만 돈다. (그리기 자체도 두 번 — 함수가 순수한지 보려고)
+- **개발 모드에서 처음에 두 번 도는 까닭**: `<StrictMode>` 가 「마운트 → 언마운트 → 다시 마운트」을 한 번 해 봐서 **정리 함수가 제대로 정리하는지 확인**하려고. 정리 안 한 setInterval 은 개발에서 2→4→6 으로 두 배씩, 운영 빌드에선 1→2→3. 운영(`npm run build`)에서는 한 번만 돈다. (렌더링 자체도 두 번 — 함수가 순수한지 보려고)
 - **배열을 빠뜨리면 낡은 값**: `[]` 로 둔 타이머 안의 `count` 는 영원히 처음 값 0. 효과 안에서 쓰는 state·props 는 전부 배열에 적는다(린트 `react-hooks/exhaustive-deps` 가 「missing dependency」로 알려 줌).
-- **useEffect 가 필요 없는 경우**: 다른 state 에서 계산되는 값(성 + 이름 → 전체 이름)은 그릴 때 계산한다. 효과로 맞추면 한 번 그린 뒤 다시 그려 **잠깐 어긋난 값(「김 / 홍길동」)이 보이고 그리기도 두 번**이다.
-- `useState(() => new Date())` — 함수로 넘기면 처음 한 번만 부른다(그릴 때마다 Date 를 만들지 않게. 린트 react(purity) 경고도 사라짐).
+- **useEffect 가 필요 없는 경우**: 다른 state 에서 계산되는 값(성 + 이름 → 전체 이름)은 렌더링 때 계산한다. effect 로 맞추면 한 번 렌더링한 뒤 리렌더링해 **잠깐 어긋난 값(「김 / 홍길동」)이 보이고 렌더링도 두 번**이다.
+- `useState(() => new Date())` — 함수로 넘기면 처음 한 번만 부른다(렌더링할 때마다 Date 를 만들지 않게. 린트 react(purity) 경고도 사라짐).
