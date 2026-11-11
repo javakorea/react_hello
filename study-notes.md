@@ -16,9 +16,11 @@
 | 2026-11-09 | 9단계 설명 들음(한 파일에 컴포넌트 여럿 · 늦게 온 응답 버리기 · 공통 fetch 함수·훅 · 로딩·오류 공통화) · 10단계는 미루고 11단계 Context 시작 — 예제 만듦 |
 | 2026-11-11 | 11단계 끝 — 연습 4문제 전부 정답(바깥 Provider 를 지우면 · 누가 리렌더링되나 · Provider 없이 읽으면 + null 이면 throw · UserProvider 빈칸) |
 
-**지금 위치: 11단계 Context 끝(2026-11-11). 다음: 미뤄 둔 10단계 `useRef` → 12단계 커스텀 훅. 9단계 연습·8080 API 불러 보기도 남아 있음.**
+| 2026-11-11 | 10단계 `useRef` 시작 — 예제 만듦(DOM 포커스 · let/state/ref 비교 · 타이머 ID · React 19 의 ref props) |
 
-- 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson11/Lesson11Context.jsx` (원래 `./App.jsx`)
+**지금 위치: 10단계 `useRef` 하는 중(2026-11-11) — 예제 만듦, 설명 듣는 중. 다음: 12단계 커스텀 훅. 9단계 연습·8080 API 불러 보기도 남아 있음.**
+
+- 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson10/Lesson10Ref.jsx` (원래 `./App.jsx`)
 - 남은 숙제(PC 에서): `src/lesson2/Badge.jsx` 정답 예시를 보고 `Lesson2Props.jsx` 에서 import 해 써 보기
 
 ---
@@ -47,7 +49,7 @@
 | 7 | ☑ | state 끌어올리기 | 형제 컴포넌트가 값 나누기 · 부모가 state, 자식은 props+콜백 | 그리드 선택 → 상세 폼 |
 | 8 | ☑ | `useEffect` | 그린 뒤 할 일 · 의존성 배열 · 정리 함수 · 두 번 도는 까닭(StrictMode) | `$p.onpageload` |
 | 9 | ◐ | 서버 호출 | `fetch` · 로딩·오류 상태 · moca2026ai 8080 API 불러 보기 | MOCA `tran` / `select.do` |
-| 10 | ☐ | `useRef` | DOM 직접 잡기(포커스) · 다시 그리지 않는 값 보관 | `$p.get('id')` |
+| 10 | ◐ | `useRef` | DOM 직접 잡기(포커스) · 다시 그리지 않는 값 보관 | `$p.get('id')` |
 | 11 | ☑ | Context | props 를 여러 층 건너 넘기지 않기 · 로그인 사용자·테마 | `moca.$g` 전역 |
 | 12 | ☐ | 커스텀 훅 | `useXxx` 로 로직 재사용 · 규칙(최상단에서만 부르기) | 공통 API 로 올리기 |
 | 13 | ☐ | 성능 | `useMemo`·`useCallback`·`memo` · React Compiler 가 해 주는 것 | — |
