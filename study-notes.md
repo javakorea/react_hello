@@ -16,10 +16,12 @@
 | 2026-11-09 | 9단계 설명 들음(한 파일에 컴포넌트 여럿 · 늦게 온 응답 버리기 · 공통 fetch 함수·훅 · 로딩·오류 공통화) · 10단계는 미루고 11단계 Context 시작 — 예제 만듦 |
 | 2026-11-11 | 11단계 끝 — 연습 4문제 전부 정답(바깥 Provider 를 지우면 · 누가 리렌더링되나 · Provider 없이 읽으면 + null 이면 throw · UserProvider 빈칸) |
 | 2026-11-11 | 10단계 `useRef` 시작 — 예제 만듦(DOM 포커스 · let/state/ref 비교 · 타이머 ID · React 19 의 ref props) · 설명 들음(ref 는 찾기가 아니라 React 가 만들며 넣기 · 값은 fiber 에 저장 · 인스턴스마다 따로 · key 로 초기화) · 용어를 React 업계 말로 통일 |
+| 2026-11-12 | 10단계 예제를 넷으로 나눠(`Ex1Focus`~`Ex4FocusChild`) 직접 돌려 봄 — return 과 effect 의 순서 · 스톱워치 `Date.now() - begin` · 함수 밖 변수(`leaked`)가 초기화되지 않는 까닭 · 함수 밖 `let` 은 인스턴스가 함께 씀 |
+| 2026-11-13 | 12단계 커스텀 hook 시작 — 예제 만듦(`useToggle` · `useFetch` · hook 마다 state 따로 · `useStopwatch`) |
 
-**지금 위치: 10단계 `useRef` 하는 중(2026-11-11) — 예제·설명 끝, 다음은 연습. 그 뒤 12단계 커스텀 훅. 9단계 연습·8080 API 불러 보기도 남아 있음.**
+**지금 위치: 12단계 커스텀 hook 하는 중(2026-11-13) — 예제 만듦, 설명 듣는 중. 남은 것: 10단계 연습 4문제(2026-11-12 낸 것) · 9단계 연습·8080 API 불러 보기.**
 
-- 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson10/Lesson10Ref.jsx` (원래 `./App.jsx`)
+- 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson12/Lesson12Hooks.jsx` (원래 `./App.jsx`)
 - 남은 숙제(PC 에서): `src/lesson2/Badge.jsx` 정답 예시를 보고 `Lesson2Props.jsx` 에서 import 해 써 보기
 
 ---
@@ -50,7 +52,7 @@
 | 9 | ◐ | 서버 호출 | `fetch` · 로딩·오류 상태 · moca2026ai 8080 API 불러 보기 | MOCA `tran` / `select.do` |
 | 10 | ◐ | `useRef` | DOM 직접 잡기(포커스) · 다시 그리지 않는 값 보관 | `$p.get('id')` |
 | 11 | ☑ | Context | props 를 여러 층 건너 넘기지 않기 · 로그인 사용자·테마 | `moca.$g` 전역 |
-| 12 | ☐ | 커스텀 훅 | `useXxx` 로 로직 재사용 · 규칙(최상단에서만 부르기) | 공통 API 로 올리기 |
+| 12 | ◐ | 커스텀 훅 | `useXxx` 로 로직 재사용 · 규칙(최상단에서만 부르기) | 공통 API 로 올리기 |
 | 13 | ☐ | 성능 | `useMemo`·`useCallback`·`memo` · React Compiler 가 해 주는 것 | — |
 
 ### 실전 — 앱 하나를 만들 수 있게
