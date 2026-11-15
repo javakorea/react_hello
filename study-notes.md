@@ -21,8 +21,9 @@
 | 2026-11-15 | 12단계 끝 — 예제를 다섯 파일로 나눔(`Ex1Copy`~`Ex5Stopwatch`) · 설명 들음(기본 매개변수 · set 함수에 함수를 넘기면 리턴값이 새 state · `{}` 와 `[]` 로 받는 차이) · 연습 4문제 전부 정답(useToggle 두 번 · state 는 컴포넌트마다 따로 · 조건부 return 뒤 hook 금지 · useInput 만들기) |
 | 2026-11-15 | 13단계 성능 — 예제 넷(`Ex1Rerender` · `Ex2Memo` · `Ex3Callback` · `Ex4UseMemo`) 만들고 설명 들음, 연습은 건너뛰고 14단계로 |
 | 2026-11-15 | 14단계 라우팅 시작 — `react-router` 8.5.1 설치, 예제(Layout+Outlet · NavLink · `:id` + useParams · useNavigate · `*` 404) |
+| 2026-11-16 | 14단계 끝 — 설명 들음(History API pushState·popstate · F5 는 서버로 가서 SPA fallback 필요 · MDI 는 Router 대신 탭 state) · 연습 4문제(:id+useParams 는 답 듣고 · 없는 Route 는 * · 저장 뒤 이동은 navigate · F5 404 는 서버에 path 없음) |
 
-**지금 위치: 14단계 라우팅 하는 중(2026-11-15) — 예제 만듦(React Router 8.5.1), 설명 듣는 중. 남은 것: 13단계 연습(예제·설명만 함) · 10단계 연습 4문제(2026-11-12 낸 것) · 9단계 연습·8080 API 불러 보기.**
+**지금 위치: 14단계 라우팅 끝(2026-11-16) — 다음은 15단계 TanStack Query. 남은 것: 13단계 연습(예제·설명만 함) · 10단계 연습 4문제(2026-11-12 낸 것) · 9단계 연습·8080 API 불러 보기.**
 
 - 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson12/Lesson12Hooks.jsx` (원래 `./App.jsx`)
 - 남은 숙제(PC 에서): `src/lesson2/Badge.jsx` 정답 예시를 보고 `Lesson2Props.jsx` 에서 import 해 써 보기
@@ -62,7 +63,7 @@
 
 | # | 상태 | 주제 | 배울 것 | 견줄 것 |
 |---|---|---|---|---|
-| 14 | ◐ | 라우팅 | React Router — 주소별 화면 · 주소 매개변수 · 화면 이동 | MOCA MDI·`openTab` |
+| 14 | ☑ | 라우팅 | React Router — 주소별 화면 · 주소 매개변수 · 화면 이동 | MOCA MDI·`openTab` |
 | 15 | ☐ | 서버 상태 라이브러리 | TanStack Query — 캐시·다시 불러오기·저장 후 목록 갱신 | — |
 | 16 | ☐ | 전역 상태 라이브러리 | Zustand (가벼움) — Redux 는 개념만 | — |
 | 17 | ☐ | TypeScript | props·state 에 타입 · `.tsx` | Java 타입 |
