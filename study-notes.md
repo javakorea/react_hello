@@ -23,8 +23,9 @@
 | 2026-11-15 | 14단계 라우팅 시작 — `react-router` 8.5.1 설치, 예제(Layout+Outlet · NavLink · `:id` + useParams · useNavigate · `*` 404) |
 | 2026-11-16 | 14단계 끝 — 설명 들음(History API pushState·popstate · F5 는 서버로 가서 SPA fallback 필요 · MDI 는 Router 대신 탭 state) · 연습 4문제(:id+useParams 는 답 듣고 · 없는 Route 는 * · 저장 뒤 이동은 navigate · F5 404 는 서버에 path 없음) |
 | 2026-11-16 | 15단계 TanStack Query 시작 — 설치, 예제(useQuery · 같은 키 캐시 공유 · 조건을 키에 · useMutation + invalidateQueries), 서버 대신 fakeApi.js |
+| 2026-11-16 | 15단계는 설명만 듣고 건너뜀(「이해 안 된다 — 패스」 · 질문: 외부 라이브러리인가 · tran 과 비교 · 같은 조회도 통신하나(staleTime) · 연타 방지 아님) · 16단계 Zustand 시작 — `zustand` 5.1.0 설치, 예제(create · selector · getState/setState · persist) |
 
-**지금 위치: 15단계 TanStack Query 하는 중(2026-11-16) — 예제 만듦(@tanstack/react-query 5.107.1), 설명 듣는 중. 남은 것: 13단계 연습(예제·설명만 함) · 10단계 연습 4문제(2026-11-12 낸 것) · 9단계 연습·8080 API 불러 보기.**
+**지금 위치: 16단계 Zustand 하는 중(2026-11-16) — 예제 만듦(zustand 5.1.0), 설명 듣는 중. 남은 것: 15단계(예제·설명만 하고 건너뜀) · 13단계 연습(예제·설명만 함) · 10단계 연습 4문제(2026-11-12 낸 것) · 9단계 연습·8080 API 불러 보기.**
 
 - 화면 전환: `src/main.jsx` 의 `import App from ...` 한 줄만 바꾼다. 지금은 `./lesson12/Lesson12Hooks.jsx` (원래 `./App.jsx`)
 - 남은 숙제(PC 에서): `src/lesson2/Badge.jsx` 정답 예시를 보고 `Lesson2Props.jsx` 에서 import 해 써 보기
@@ -66,7 +67,7 @@
 |---|---|---|---|---|
 | 14 | ☑ | 라우팅 | React Router — 주소별 화면 · 주소 매개변수 · 화면 이동 | MOCA MDI·`openTab` |
 | 15 | ◐ | 서버 상태 라이브러리 | TanStack Query — 캐시·다시 불러오기·저장 후 목록 갱신 | — |
-| 16 | ☐ | 전역 상태 라이브러리 | Zustand (가벼움) — Redux 는 개념만 | — |
+| 16 | ◐ | 전역 상태 라이브러리 | Zustand (가벼움) — Redux 는 개념만 | — |
 | 17 | ☐ | TypeScript | props·state 에 타입 · `.tsx` | Java 타입 |
 | 18 | ☐ | 스타일링 | CSS Modules · Tailwind 맛보기 | MOCA 테마 CSS 변수 |
 | 19 | ☐ | 테스트 | Vitest + Testing Library | JUnit |
