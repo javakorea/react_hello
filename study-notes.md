@@ -24,6 +24,7 @@
 | 2026-11-16 | 14단계 끝 — 설명 들음(History API pushState·popstate · F5 는 서버로 가서 SPA fallback 필요 · MDI 는 Router 대신 탭 state) · 연습 4문제(:id+useParams 는 답 듣고 · 없는 Route 는 * · 저장 뒤 이동은 navigate · F5 404 는 서버에 path 없음) |
 | 2026-11-16 | 15단계 TanStack Query 시작 — 설치, 예제(useQuery · 같은 키 캐시 공유 · 조건을 키에 · useMutation + invalidateQueries), 서버 대신 fakeApi.js |
 | 2026-11-16 | 15단계는 설명만 듣고 건너뜀(「이해 안 된다 — 패스」 · 질문: 외부 라이브러리인가 · tran 과 비교 · 같은 조회도 통신하나(staleTime) · 연타 방지 아님) · 16단계 Zustand 시작 — `zustand` 5.1.0 설치, 예제(create · selector · getState/setState · persist) |
+| 2026-11-17 | 커리큘럼에 21단계 Next.js 추가(20 빌드·배포 뒤) — 마무리 과제는 22단계로 |
 
 **지금 위치: 16단계 Zustand 하는 중(2026-11-16) — 예제 만듦(zustand 5.1.0), 설명 듣는 중. 남은 것: 15단계(예제·설명만 하고 건너뜀) · 13단계 연습(예제·설명만 함) · 10단계 연습 4문제(2026-11-12 낸 것) · 9단계 연습·8080 API 불러 보기.**
 
