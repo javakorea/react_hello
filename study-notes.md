@@ -72,12 +72,13 @@
 | 18 | ☐ | 스타일링 | CSS Modules · Tailwind 맛보기 | MOCA 테마 CSS 변수 |
 | 19 | ☐ | 테스트 | Vitest + Testing Library | JUnit |
 | 20 | ☐ | 빌드·배포 | `npm run build` · `dist/` 를 서버에 올리기 · 환경변수(`import.meta.env`) | `/moca-ftp` |
+| 21 | ☐ | Next.js | 폴더 기반 라우팅(`app/…/page.jsx`·`layout.jsx`) · 서버 렌더링 · Server Components · Node 서버가 따로 필요한 까닭 | 14단계 MiniRouter · Spring 서버 |
 
 ### 마무리 과제
 
 | # | 상태 | 과제 |
 |---|---|---|
-| 21 | ☐ | **MOCA 업무 화면 하나를 React 로 다시 만들기** — 검색 조건 + 그리드 + 상세 폼 + 저장(8080 API). 같은 작업 공간의 `moca_react` 와 견줘 본다 |
+| 22 | ☐ | **MOCA 업무 화면 하나를 React 로 다시 만들기** — 검색 조건 + 그리드 + 상세 폼 + 저장(8080 API). 같은 작업 공간의 `moca_react` 와 견줘 본다 |
 
 ---
 
